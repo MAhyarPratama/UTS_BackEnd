@@ -6,42 +6,42 @@ class Purchase {
         $this->db = $dbConnection;
     }
 
+    // Mengambil semua baris data
     public function getAllPurchases() {
-        $stmt = $this->db->prepare("SELECT * FROM purchases");
-        $stmt->execute();
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $query = "SELECT * FROM purchases";
+        $result = $this->db->query($query);
+        return $result->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    // Mengambil satu baris data berdasarkan nomor ID
     public function getPurchaseById($id) {
-        $stmt = $this->db->prepare("SELECT * FROM purchases WHERE id = :id");
-        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
-        $stmt->execute();
+        $query = "SELECT * FROM purchases WHERE id = ?";
+        $stmt = $this->db->prepare($query);
+        $stmt->execute([$id]);
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
-    public function createPurchase($data) {
-        $stmt = $this->db->prepare("INSERT INTO purchases (product_id, quantity, purchase_date) VALUES (:product_id, :quantity, :purchase_date)");
-        $stmt->bindParam(':product_id', $data['product_id']);
-        $stmt->bindParam(':quantity', $data['quantity']);
-        $stmt->bindParam(':purchase_date', $data['purchase_date']);
-        $stmt->execute();
+    // Menginputkan satu baris data
+    public function insertPurchase($data) {
+        $query = "INSERT INTO purchases (product_id, quantity, purchase_date) VALUES (?, ?, ?)";
+        $stmt = $this->db->prepare($query);
+        $stmt->execute([$data['product_id'], $data['quantity'], $data['purchase_date']]);
         return $this->db->lastInsertId();
     }
 
+    // Memperbarui satu baris data berdasarkan nomor ID
     public function updatePurchase($id, $data) {
-        $stmt = $this->db->prepare("UPDATE purchases SET product_id = :product_id, quantity = :quantity, purchase_date = :purchase_date WHERE id = :id");
-        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
-        $stmt->bindParam(':product_id', $data['product_id']);
-        $stmt->bindParam(':quantity', $data['quantity']);
-        $stmt->bindParam(':purchase_date', $data['purchase_date']);
-        $stmt->execute();
+        $query = "UPDATE purchases SET product_id = ?, quantity = ?, purchase_date = ? WHERE id = ?";
+        $stmt = $this->db->prepare($query);
+        $stmt->execute([$data['product_id'], $data['quantity'], $data['purchase_date'], $id]);
         return $stmt->rowCount();
     }
 
+    // Menghapus satu baris data berdasarkan nomor ID
     public function deletePurchase($id) {
-        $stmt = $this->db->prepare("DELETE FROM purchases WHERE id = :id");
-        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
-        $stmt->execute();
+        $query = "DELETE FROM purchases WHERE id = ?";
+        $stmt = $this->db->prepare($query);
+        $stmt->execute([$id]);
         return $stmt->rowCount();
     }
 }

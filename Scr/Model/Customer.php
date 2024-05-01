@@ -6,42 +6,42 @@ class Customer {
         $this->db = $dbConnection;
     }
 
+    // Mengambil semua baris data
     public function getAllCustomers() {
-        $stmt = $this->db->prepare("SELECT * FROM customers");
-        $stmt->execute();
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $query = "SELECT * FROM customers";
+        $result = $this->db->query($query);
+        return $result->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    // Mengambil satu baris data berdasarkan nomor ID
     public function getCustomerById($id) {
-        $stmt = $this->db->prepare("SELECT * FROM customers WHERE id = :id");
-        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
-        $stmt->execute();
+        $query = "SELECT * FROM customers WHERE id = ?";
+        $stmt = $this->db->prepare($query);
+        $stmt->execute([$id]);
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
-    public function createCustomer($data) {
-        $stmt = $this->db->prepare("INSERT INTO customers (name, email, address) VALUES (:name, :email, :address)");
-        $stmt->bindParam(':name', $data['name']);
-        $stmt->bindParam(':email', $data['email']);
-        $stmt->bindParam(':address', $data['address']);
-        $stmt->execute();
+    // Menginputkan satu baris data
+    public function insertCustomer($data) {
+        $query = "INSERT INTO customers (name, email, address) VALUES (?, ?, ?)";
+        $stmt = $this->db->prepare($query);
+        $stmt->execute([$data['name'], $data['email'], $data['address']]);
         return $this->db->lastInsertId();
     }
 
+    // Memperbarui satu baris data berdasarkan nomor ID
     public function updateCustomer($id, $data) {
-        $stmt = $this->db->prepare("UPDATE customers SET name = :name, email = :email, address = :address WHERE id = :id");
-        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
-        $stmt->bindParam(':name', $data['name']);
-        $stmt->bindParam(':email', $data['email']);
-        $stmt->bindParam(':address', $data['address']);
-        $stmt->execute();
+        $query = "UPDATE customers SET name = ?, email = ?, address = ? WHERE id = ?";
+        $stmt = $this->db->prepare($query);
+        $stmt->execute([$data['name'], $data['email'], $data['address'], $id]);
         return $stmt->rowCount();
     }
 
+    // Menghapus satu baris data berdasarkan nomor ID
     public function deleteCustomer($id) {
-        $stmt = $this->db->prepare("DELETE FROM customers WHERE id = :id");
-        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
-        $stmt->execute();
+        $query = "DELETE FROM customers WHERE id = ?";
+        $stmt = $this->db->prepare($query);
+        $stmt->execute([$id]);
         return $stmt->rowCount();
     }
 }
