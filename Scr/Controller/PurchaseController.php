@@ -1,68 +1,57 @@
 <?php
-require_once 'Model/Purchase.php';
+require_once __DIR__ . '/../Model/Purchases.php';
 
-class PurchasesController {
+class PurchaseController {
     private $purchaseModel;
 
-    public function __construct() {
-        $this->purchaseModel = new Purchase();
+    public function __construct($pdo) {
+        $this->purchaseModel = new Purchase($pdo);
     }
 
-    public function handleRequest() {
-        $requestMethod = $_SERVER['REQUEST_METHOD'];
-        switch ($requestMethod) {
-            case 'GET':
-                if (!empty($_GET['id'])) {
-                    $this->getPurchase($_GET['id']);
-                } else {
-                    $this->getAllPurchases();
-                }
-                break;
-            case 'POST':
-                $this->createPurchase($_POST);
-                break;
-            case 'PUT':
-                parse_str(file_get_contents("php://input"), $put_vars);
-                $this->updatePurchase($put_vars['id'], $put_vars);
-                break;
-            case 'DELETE':
-                parse_str(file_get_contents("php://input"), $delete_vars);
-                $this->deletePurchase($delete_vars['id']);
-                break;
-            default:
-                header("HTTP/1.1 405 Method Not Allowed");
-                break;
+    public function getAllPurchases() {
+        try {
+            return $this->purchaseModel->getAllPurchases();
+        } catch (Exception $e) {
+            return ['error' => $e->getMessage()];
         }
     }
 
-    private function getAllPurchases() {
-        $purchases = $this->purchaseModel->getAllPurchases();
-        header("Content-Type: application/json");
-        echo json_encode($purchases);
+    public function getPurchaseById($purchaseId) {
+        try {
+            return $this->purchaseModel->getPurchaseById($purchaseId);
+        } catch (Exception $e) {
+            return ['error' => $e->getMessage()];
+        }
     }
 
-    private function getPurchase($id) {
-        $purchase = $this->purchaseModel->getPurchaseById($id);
-        header("Content-Type: application/json");
-        echo json_encode($purchase);
+    public function addPurchase($data) {
+        if (empty($data)) {
+            return ['error' => 'Data cannot be empty'];
+        }
+        try {
+            return $this->purchaseModel->insertPurchase($data);
+        } catch (Exception $e) {
+            return ['error' => $e->getMessage()];
+        }
     }
 
-    private function createPurchase($data) {
-        $newId = $this->purchaseModel->createPurchase($data);
-        header("Content-Type: application/json");
-        echo json_encode(['id' => $newId]);
+    public function updatePurchase($purchaseId, $data) {
+        if (empty($data)) {
+            return ['error' => 'Data cannot be empty'];
+        }
+        try {
+            return $this->purchaseModel->updatePurchase($purchaseId, $data);
+        } catch (Exception $e) {
+            return ['error' => $e->getMessage()];
+        }
     }
 
-    private function updatePurchase($id, $data) {
-        $result = $this->purchaseModel->updatePurchase($id, $data);
-        header("Content-Type: application/json");
-        echo json_encode(['updated' => $result]);
-    }
-
-    private function deletePurchase($id) {
-        $result = $this->purchaseModel->deletePurchase($id);
-        header("Content-Type: application/json");
-        echo json_encode(['deleted' => $result]);
+    public function deletePurchase($purchaseId) {
+        try {
+            return $this->purchaseModel->deletePurchase($purchaseId);
+        } catch (Exception $e) {
+            return ['error' => $e->getMessage()];
+        }
     }
 }
 ?>
