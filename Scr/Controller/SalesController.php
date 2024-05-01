@@ -1,68 +1,62 @@
 <?php
-require_once 'Model/Sale.php';
+require_once __DIR__ . '/../Model/Sales.php';
 
 class SalesController {
     private $salesModel;
 
-    public function __construct() {
-        $this->salesModel = new Sales();
+    public function __construct($pdo) {
+        $this->salesModel = new Sales($pdo);
     }
 
-    public function handleRequest() {
-        $requestMethod = $_SERVER['REQUEST_METHOD'];
-        switch ($requestMethod) {
-            case 'GET':
-                if (!empty($_GET['id'])) {
-                    $this->getSale($_GET['id']);
-                } else {
-                    $this->getAllSales();
-                }
-                break;
-            case 'POST':
-                $this->createSale($_POST);
-                break;
-            case 'PUT':
-                parse_str(file_get_contents("php://input"), $put_vars);
-                $this->updateSale($put_vars['id'], $put_vars);
-                break;
-            case 'DELETE':
-                parse_str(file_get_contents("php://input"), $delete_vars);
-                $this->deleteSale($delete_vars['id']);
-                break;
-            default:
-                header("HTTP/1.1 405 Method Not Allowed");
-                break;
+    
+    public function getAllSales() {
+        try {
+            return $this->salesModel->getAllSales();
+        } catch (Exception $e) {
+            return ['error' => $e->getMessage()];
         }
     }
 
-    private function getAllSales() {
-        $sales = $this->saleModel->getAllSales();
-        header("Content-Type: application/json");
-        echo json_encode($sales);
+    
+    public function getSalesById($orderId) {
+        try {
+            return $this->salesModel->getSalesById($orderId);
+        } catch (Exception $e) {
+            return ['error' => $e->getMessage()];
+        }
     }
 
-    private function getSales($id) {
-        $sale = $this->saleModel->getSaleById($id);
-        header("Content-Type: application/json");
-        echo json_encode($sale);
+    
+    public function addSales($data) {
+        if (empty($data)) {
+            return ['error' => 'Data cannot be empty'];
+        }
+        try {
+            return $this->salesModel->insertSales($data);
+        } catch (Exception $e) {
+            return ['error' => $e->getMessage()];
+        }
     }
 
-    private function createSales($data) {
-        $newId = $this->saleModel->createSale($data);
-        header("Content-Type: application/json");
-        echo json_encode(['id' => $newId]);
+    
+    public function updateSales($orderId, $data) {
+        if (empty($data)) {
+            return ['error' => 'Data cannot be empty'];
+        }
+        try {
+            return $this->salesModel->updateSales($orderId, $data);
+        } catch (Exception $e) {
+            return ['error' => $e->getMessage()];
+        }
     }
 
-    private function updateSales($id, $data) {
-        $result = $this->saleModel->updateSale($id, $data);
-        header("Content-Type: application/json");
-        echo json_encode(['updated' => $result]);
-    }
-
-    private function deleteSales($id) {
-        $result = $this->saleModel->deleteSale($id);
-        header("Content-Type: application/json");
-        echo json_encode(['deleted' => $result]);
+    
+    public function deleteSales($orderId) {
+        try {
+            return $this->salesModel->deleteSales($orderId);
+        } catch (Exception $e) {
+            return ['error' => $e->getMessage()];
+        }
     }
 }
 ?>
