@@ -6,42 +6,42 @@ class Sales {
         $this->db = $dbConnection;
     }
 
+    // Mengambil semua baris data
     public function getAllSales() {
-        $stmt = $this->db->prepare("SELECT * FROM sales");
-        $stmt->execute();
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $query = "SELECT * FROM sales";
+        $result = $this->db->query($query);
+        return $result->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    // Mengambil satu baris data berdasarkan nomor ID
     public function getSalesById($id) {
-        $stmt = $this->db->prepare("SELECT * FROM sales WHERE id = :id");
-        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
-        $stmt->execute();
+        $query = "SELECT * FROM sales WHERE id = ?";
+        $stmt = $this->db->prepare($query);
+        $stmt->execute([$id]);
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
-    public function createSales($data) {
-        $stmt = $this->db->prepare("INSERT INTO sales (product_id, quantity, sale_date) VALUES (:product_id, :quantity, :sale_date)");
-        $stmt->bindParam(':product_id', $data['product_id']);
-        $stmt->bindParam(':quantity', $data['quantity']);
-        $stmt->bindParam(':sale_date', $data['sale_date']);
-        $stmt->execute();
+    // Menginputkan satu baris data
+    public function insertSales($data) {
+        $query = "INSERT INTO sales (product_id, quantity, sale_date) VALUES (?, ?, ?)";
+        $stmt = $this->db->prepare($query);
+        $stmt->execute([$data['product_id'], $data['quantity'], $data['sale_date']]);
         return $this->db->lastInsertId();
     }
 
+    // Memperbarui satu baris data berdasarkan nomor ID
     public function updateSales($id, $data) {
-        $stmt = $this->db->prepare("UPDATE sales SET product_id = :product_id, quantity = :quantity, sale_date = :sale_date WHERE id = :id");
-        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
-        $stmt->bindParam(':product_id', $data['product_id']);
-        $stmt->bindParam(':quantity', $data['quantity']);
-        $stmt->bindParam(':sale_date', $data['sale_date']);
-        $stmt->execute();
+        $query = "UPDATE sales SET product_id = ?, quantity = ?, sale_date = ? WHERE id = ?";
+        $stmt = $this->db->prepare($query);
+        $stmt->execute([$data['product_id'], $data['quantity'], $data['sale_date'], $id]);
         return $stmt->rowCount();
     }
 
+    // Menghapus satu baris data berdasarkan nomor ID
     public function deleteSales($id) {
-        $stmt = $this->db->prepare("DELETE FROM sales WHERE id = :id");
-        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
-        $stmt->execute();
+        $query = "DELETE FROM sales WHERE id = ?";
+        $stmt = $this->db->prepare($query);
+        $stmt->execute([$id]);
         return $stmt->rowCount();
     }
 }
