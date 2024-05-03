@@ -117,4 +117,4 @@ Untuk mengatasi kurangnya pengalaman dalam proyek terstruktur, saya terus mempel
 
 Saya juga mencari dari beberapa sumber command apa saja yang disediakan pada Git
 
-Saya harap kedepannya saya lebih terbiasa lagi dalam membuat project seperti ini, dan juga naik ketingkat yang lebih tinggi. Tak lupa saya mengucapkan terima kasih kepada dosen yang mengampu saya dalam mata kuliah Back-End Web Development,
+Saya harap kedepannya saya lebih terbiasa lagi dalam membuat project seperti ini, dan juga naik ketingkat yang lebih tinggi. 
