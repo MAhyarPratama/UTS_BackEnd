@@ -109,12 +109,7 @@ Setiap fungsi ini dirancang untuk menangani aspek tertentu dari manajemen data p
     }
 
 
-Selain itu, karena ini merupakan project PHP terstruktur pertama saya, saya merasa kurang berpengalaman dan harus membiasakan diri dengan hal baru.
+Selain itu, karena ini merupakan tugas PHP sperti ini, saya merasa kurang berpengalaman dan harus membiasakan diri dengan hal baru.
 
-Dan untuk penerapan Git untuk project satu ini, menjadi tantangan tersendiri karena saya baru kali ini membuat project yang langsung terhubung ke github.
-
-Untuk mengatasi kurangnya pengalaman dalam proyek terstruktur, saya terus mempelajari dan membiasakan diri dengan pola seperti ini.
-
-Saya juga mencari dari beberapa sumber command apa saja yang disediakan pada Git
-
-Saya harap kedepannya saya lebih terbiasa lagi dalam membuat project seperti ini, dan juga naik ketingkat yang lebih tinggi. 
+Untuk mengatasi kurangnya pengalaman dalam tugas, saya terus mempelajari dan membiasakan diri.
+Saya harap kedepannya lebih terbiasa lagi dalam membuat tuagas maupun project seperti ini, dan bisa makin mengasah skill sampai ketingkat tertinggi :) . 
